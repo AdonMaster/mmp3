@@ -1,68 +1,71 @@
 import {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogFooter,
-    AlertDialogBody,
-    AlertDialogBackdrop,
-} from '@/components/ui/alert-dialog';
+    Modal,
+    ModalBackdrop,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+} from '@/components/ui/modal';
 import { Button, ButtonText } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
 import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
 import { Icon, TrashIcon } from '@/components/ui/icon';
 import { Box } from '@/components/ui/box';
-import {useState} from "react";
+import {useState} from "react"
 
-function Example() {
-    const [showAlertDialog, setShowAlertDialog] = useState(false);
-    const handleClose = () => setShowAlertDialog(false);
+export default function Example() {
+    const [showModal, setShowModal] = useState(false);
     return (
-        <Box className={'p-4'}>
-            <Button onPress={() => setShowAlertDialog(true)}>
-                <ButtonText>Delete Invoisce</ButtonText>
+        <>
+            <Button onPress={() => setShowModal(true)}>
+                <ButtonText>Delete Post</ButtonText>
             </Button>
-            <AlertDialog
-                isOpen={showAlertDialog}
-                onClose={handleClose}
-                useRNModal={false}
+            <Modal
+                isOpen={showModal}
+                onClose={() => {
+                    setShowModal(false);
+                }}
             >
-                <AlertDialogBackdrop />
-                <AlertDialogContent className="gap-4 items-center">
-                    <Box className="rounded-full h-[52px] w-[52px] bg-background-error items-center justify-center">
-                        <Icon as={TrashIcon} size="lg" className="stroke-error-500" />
-                    </Box>
-                    <AlertDialogHeader className="mb-2">
-                        <Heading size="md">Delete account?</Heading>
-                    </AlertDialogHeader>
-                    <AlertDialogBody>
-                        <Text size="sm" className="text-center">
-                            The invoice will be deleted from the invoices section and in the
-                            documents folder. This cannot be undone.
+                <ModalBackdrop />
+                <ModalContent className="max-w-[305px] items-center">
+                    <ModalHeader>
+                        <Box className="w-[56px] h-[56px] rounded-full bg-background-error items-center justify-center">
+                            <Icon as={TrashIcon} className="stroke-error-600" size="xl" />
+                        </Box>
+                    </ModalHeader>
+                    <ModalBody className="mt-0 mb-4">
+                        <Heading size="md" className="text-typography-950 mb-2 text-center">
+                            Delete blog post
+                        </Heading>
+                        <Text size="sm" className="text-typography-500 text-center">
+                            Are you sure you want to delete this post? This action cannot be
+                            undone.
                         </Text>
-                    </AlertDialogBody>
-                    <AlertDialogFooter className="mt-5">
-                        <Button
-                            size="sm"
-                            action="negative"
-                            onPress={handleClose}
-                            className="px-[30px]"
-                        >
-                            <ButtonText>Delete</ButtonText>
-                        </Button>
+                    </ModalBody>
+                    <ModalFooter className="w-full">
                         <Button
                             variant="outline"
                             action="secondary"
-                            onPress={handleClose}
                             size="sm"
-                            className="px-[30px]"
+                            onPress={() => {
+                                setShowModal(false);
+                            }}
+                            className="flex-grow"
                         >
                             <ButtonText>Cancel</ButtonText>
                         </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </Box>
+                        <Button
+                            onPress={() => {
+                                setShowModal(false);
+                            }}
+                            size="sm"
+                            className="flex-grow"
+                        >
+                            <ButtonText>Delete</ButtonText>
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </>
     );
 }
-
-export default Example
