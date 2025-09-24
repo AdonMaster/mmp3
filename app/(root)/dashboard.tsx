@@ -15,20 +15,20 @@ import {
     UserIcon,
     Users2Icon
 } from "lucide-react-native"
-import {View} from "react-native"
+import {ScrollView, View} from "react-native"
 import {FontAwesome6} from '@expo/vector-icons'
 import {Card} from "@/components/ui/card"
 import {VStack} from "@/components/ui/vstack"
 import {Heading} from "@/components/ui/heading"
-import {Avatar, AvatarFallbackText, AvatarImage} from "@/components/ui/avatar"
 
 
 export default function Dashboard() {
 
-    return <Box
+    return <ScrollView><Box
         className={'p-4 h-full'}
         style={{backgroundColor: '#f4efe8'}}
     >
+
         <Text
             size='2xl' className='font-bold my-5'
         >
@@ -210,5 +210,5 @@ export default function Dashboard() {
             </Card>
         </Box>
 
-    </Box>
+    </Box></ScrollView>
 }

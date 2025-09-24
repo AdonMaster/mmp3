@@ -4,6 +4,7 @@ import {HStack} from "@/components/ui/hstack"
 import {moderateScale, verticalScale} from "@/utils/font-scaling"
 import {Bell, CircleQuestionMarkIcon, HomeIcon} from 'lucide-react-native'
 import {Tabs} from "expo-router"
+import {StatusBar} from "expo-status-bar";
 
 
 export default function Layout() {
@@ -13,6 +14,10 @@ export default function Layout() {
     return <View
         style={{flex: 1, backgroundColor: '#717275', flexDirection: 'column'}}
     >
+
+        <StatusBar
+            style='light'
+        />
 
         {/*top inset*/}
         <View
@@ -91,5 +96,7 @@ export default function Layout() {
         <View style={{
             backgroundColor: '#717275', height: safeInsets.bottom
         }}/>
+
+
     </View>
 }

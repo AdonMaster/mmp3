@@ -1,5 +1,5 @@
 import {Text} from '@/components/ui/text';
-import {Image, View} from "react-native"
+import {Image, KeyboardAvoidingView, Platform, View} from "react-native"
 import {SafeAreaView} from "react-native-safe-area-context"
 import {moderateScale, scale, scaleFont, verticalScale} from "@/utils/font-scaling"
 import {useMemo, useState} from "react"
@@ -105,8 +105,9 @@ export default function Login() {
             </HStack>}
 
 
-            <View
+            <KeyboardAvoidingView
                 className={'w-full'}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <Input
                     variant="rounded"
@@ -131,7 +132,7 @@ export default function Login() {
                         Entrar
                     </ButtonText>
                 </Button>
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
 
         <AlertDialog isOpen={showCodeDialog} onClose={handleClose}>
