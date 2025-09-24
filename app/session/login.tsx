@@ -1,7 +1,7 @@
 import {Text} from '@/components/ui/text';
 import {Image, View} from "react-native"
 import {SafeAreaView} from "react-native-safe-area-context"
-import {moderateScale, scale, scaleFont, verticalScale} from "@/app/utils/font-scaling"
+import {moderateScale, scale, scaleFont, verticalScale} from "@/utils/font-scaling"
 import {useMemo, useState} from "react"
 import {Button, ButtonText} from "@/components/ui/button"
 import {Input, InputField} from "@/components/ui/input"
@@ -18,7 +18,7 @@ import {Icon, MailIcon} from "@/components/ui/icon"
 import {Heading} from "@/components/ui/heading"
 import {HStack} from "@/components/ui/hstack"
 import {CircleX} from "lucide-react-native"
-import str from "@/app/utils/str"
+import str from "@/utils/str"
 import {router} from "expo-router"
 
 
