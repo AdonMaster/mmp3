@@ -16,6 +16,8 @@ export const config = {
     '--color-primary-900': '10 10 10',
     '--color-primary-950': '8 8 8',
 
+    '--color-accent': '27 50 36',
+
     /* Secondary  */
     '--color-secondary-0': '253 253 253',
     '--color-secondary-50': '251 251 251',
@@ -167,6 +169,8 @@ export const config = {
     '--color-primary-800': '253 253 253',
     '--color-primary-900': '254 249 249',
     '--color-primary-950': '253 252 252',
+
+    '--color-accent': '27 50 36',
 
     /* Secondary  */
     '--color-secondary-0': '20 20 20',

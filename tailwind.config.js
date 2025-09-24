@@ -167,6 +167,7 @@ module.exports = {
           info: 'rgb(var(--color-background-info)/<alpha-value>)',
           light: '#FBFBFB',
           dark: '#181719',
+          accent: 'rgb(var(--color-accent)/<alpha-value>)'
         },
         indicator: {
           primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
