@@ -49,7 +49,7 @@ export default function Layout() {
         </HStack>
 
         <View
-            style={{flexGrow: 1,backgroundColor: 'pink'}}
+            style={{flexGrow: 1}}
         >
             <Tabs
                 screenOptions={{
