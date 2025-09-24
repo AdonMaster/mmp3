@@ -1,7 +1,7 @@
 import {Image, View} from "react-native"
 import {useSafeAreaInsets} from "react-native-safe-area-context"
 import {HStack} from "@/components/ui/hstack"
-import {moderateScale, verticalScale} from "@/app/utils/font-scaling"
+import {moderateScale, verticalScale} from "@/utils/font-scaling"
 import {Bell, CircleQuestionMarkIcon, HomeIcon} from 'lucide-react-native'
 import {Tabs} from "expo-router"
 
@@ -11,7 +11,7 @@ export default function Layout() {
     const safeInsets = useSafeAreaInsets()
 
     return <View
-        style={{flex: 1, backgroundColor: '#717275'}}
+        style={{flex: 1, backgroundColor: '#717275', flexDirection: 'column'}}
     >
 
         {/*top inset*/}
@@ -21,7 +21,7 @@ export default function Layout() {
 
         {/*toolbar*/}
         <HStack style={{
-            backgroundColor: '#717275', boxShadow: '#00000020 0px 3px 5px',
+            backgroundColor: '#717275', boxShadow: '#00000020 0px 6px 8px',
             padding: moderateScale(12),
             alignItems: 'center'
         }}>
@@ -48,39 +48,48 @@ export default function Layout() {
             </View>
         </HStack>
 
-        <Tabs
-            screenOptions={{
-                headerShown: false,
-                tabBarActiveTintColor: 'white',
-                tabBarItemStyle: {backgroundColor: '#717275'},
-                tabBarShowLabel: false,
-                tabBarStyle: {
-                    height: 80,                    // Adjust the height of the tab bar if needed
-                },
-                tabBarIconStyle: {
-                    // Style your icon container
-                    width: 40,
-                    height: 40,
-                }
-            }}
+        <View
+            style={{flexGrow: 1,backgroundColor: 'pink'}}
         >
-            <Tabs.Screen
-                name='dashboard'
-                options={{
-                    tabBarLabel: () => null,
-                    tabBarIcon: (t) => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <HomeIcon size={28} color={t.color}/>
-                    </View>
+            <Tabs
+                screenOptions={{
+                    headerShown: false,
+                    tabBarActiveTintColor: 'white',
+                    tabBarItemStyle: {backgroundColor: '#717275'},
+                    tabBarShowLabel: false,
+                    tabBarStyle: {
+                    },
+                    tabBarIconStyle: {
+                        // Style your icon container
+                        width: 40,
+                        height: 40,
+                    },
                 }}
-            />
+                safeAreaInsets={{bottom: 0, top: 0}}
+            >
+                <Tabs.Screen
+                    name='dashboard'
+                    options={{
+                        tabBarLabel: () => null,
+                        tabBarIcon: (t) => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <HomeIcon size={28} color={t.color}/>
+                        </View>
+                    }}
+                />
 
-            <Tabs.Screen
-                name='testing'
-                options={{
-                    href: null
-                }}
-            />
+                <Tabs.Screen
+                    name='testing'
+                    options={{
+                        href: null
+                    }}
+                />
 
-        </Tabs>
+            </Tabs>
+
+        </View>
+
+        <View style={{
+            backgroundColor: '#717275', height: safeInsets.bottom
+        }}/>
     </View>
 }
