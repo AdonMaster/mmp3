@@ -40,7 +40,7 @@ export default function Layout() {
             <Image
                 source={require('@/assets/img/logo-800.png')}
                 style={{
-                    height: 349 * .22, width: 714 * .22, resizeMode: 'contain'
+                    height: 349 * .20, width: 714 * .20, resizeMode: 'contain'
                 }}
             />
             <View

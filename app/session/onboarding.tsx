@@ -25,14 +25,14 @@ export default function Onboarding() {
     >
         <ImgW
             source={require('@/assets/img/border-art-1.jpg')}
-            w={ImgWValue.fromScreenWidth(33)}
+            w={ImgWValue.fromScreenWidth(26)}
             style={{
                 position: 'absolute', top: 0, left: 0
             }}
         />
         <ImgW
             source={require('@/assets/img/border-art-2.jpg')}
-            w={ImgWValue.fromScreenWidth(33)}
+            w={ImgWValue.fromScreenWidth(26)}
             style={{
                 position: 'absolute', bottom: 0, right: 0
             }}
