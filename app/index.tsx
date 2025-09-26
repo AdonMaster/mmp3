@@ -1,6 +1,7 @@
-import Login from "@/app/session/login"
+import Onboarding from "@/app/session/onboarding"
+import Register from "@/app/session/register"
 
 export default function Index() {
 
-    return <Login/>
+    return <Onboarding/>
 }

@@ -5,68 +5,31 @@ import {Button, ButtonText} from "@/components/ui/button"
 import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
 import {VStack} from "@/components/ui/vstack"
 import {Input, InputField, InputIcon, InputSlot} from "@/components/ui/input"
-import {useEffect, useState} from "react"
-import {EyeIcon, EyeOffIcon, Icon} from "@/components/ui/icon"
+import {useState} from "react"
+import {EyeIcon, EyeOffIcon} from "@/components/ui/icon"
 import * as SecureStore from 'expo-secure-store'
 import str from "@/utils/str"
-import {router, useLocalSearchParams} from "expo-router"
 import {HStack} from "@/components/ui/hstack"
-import {useIsFocused} from "@react-navigation/native"
-import {Toast, ToastTitle, useToast} from "@/components/ui/toast"
-import {Send} from "lucide-react-native"
-import {Divider} from "@/components/ui/divider"
-import Msg from "@/core/Msg"
+import {router} from "expo-router"
 
 
-export default function Login() {
+export default function Register() {
 
     //
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
-
-    //
-    const isFocused = useIsFocused()
-    const toast = useToast()
-    const params = useLocalSearchParams()
-
-    //
-    useEffect(() => {
-        if (params.success && isFocused) {
-
-            toast.show({
-                placement: 'top',
-                render: ({ id }) => {
-                    const toastId = 'toast-' + id;
-                    return (
-                        <Toast
-                            nativeID={toastId}
-                            className="px-5 py-3 gap-4 shadow-soft-1 items-center flex-row"
-                            action='success'
-                        >
-                            <Icon
-                                as={Send}
-                                size="xl"
-                                className="fill-typography-100 stroke-none"
-                            />
-                            <Divider
-                                orientation="vertical"
-                                className="h-[30px] bg-outline-200"
-                            />
-                            <ToastTitle size="sm">{Msg.translate(params.success as string)}</ToastTitle>
-                        </Toast>
-                    );
-                },
-            });
-
-        }
-    }, [isFocused]);
+    const [passwordConfirmed, setPasswordConfirmed] = useState('')
+    const [showPasswordConfirmed, setShowPasswordConfirmed] = useState(false)
 
     //
     function validate() {
         if (! str.isEmail(email)) throw new Error('Email inválido.')
         if (password.length <= 0) throw new Error('Senha requerida.')
+        if (passwordConfirmed.length <= 0) throw new Error('Confirmação de password requerida.')
+        if (password !== passwordConfirmed) throw new Error('Senha e cofirmação de password devem ser iguais.')
     }
+
 
     async function submit()
     {
@@ -77,11 +40,17 @@ export default function Login() {
 
             const key = str.sanitize(email.trim() + '__password')
             const pwd = SecureStore.getItem(key)
-            if (! pwd) throw new Error('Email inexistente.')
-            if (pwd !== password) throw new Error('Senha inválida.')
+            if (pwd) {
+                setPassword('')
+                setPasswordConfirmed('')
+                throw new Error('Usuário já existente!')
+            }
 
-            // success
-            router.replace('/(root)/dashboard')
+            // persist
+            SecureStore.setItem(key, password)
+
+            //
+            router.replace('/session/login?success=user_created')
 
         } catch (e: unknown) {
             let reason = e+''
@@ -136,7 +105,7 @@ export default function Login() {
                 <Text
                     style={{color: 'white', fontSize: scaleFont(16)}}
                 >
-                    Acesse sua conta
+                    Primeiro acesso
                 </Text>
             </VStack>
 
@@ -176,6 +145,29 @@ export default function Login() {
                         onPress={() => setShowPassword(v => !v)}
                     >
                         <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
+                    </InputSlot>
+                </Input>
+
+                <Input
+                    variant="rounded"
+                    size="lg"
+                    className={'bg-white'}
+                >
+                    <InputField
+                        className={' font-bold'}
+                        textContentType={'password'}
+                        placeholder="Confirmação de senha"
+                        autoComplete={'off'}
+                        type={showPasswordConfirmed ? 'text' : 'password'}
+                        value={passwordConfirmed} onChangeText={setPasswordConfirmed}
+                    />
+                    <InputSlot
+                        style={{
+                            marginEnd: scaleFont(10)
+                        }}
+                        onPress={() => setShowPasswordConfirmed(v => !v)}
+                    >
+                        <InputIcon as={showPasswordConfirmed ? EyeIcon : EyeOffIcon}/>
                     </InputSlot>
                 </Input>
 
