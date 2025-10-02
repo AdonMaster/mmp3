@@ -16,6 +16,7 @@ import {Toast, ToastTitle, useToast} from "@/components/ui/toast"
 import {Send} from "lucide-react-native"
 import {Divider} from "@/components/ui/divider"
 import Msg from "@/core/Msg"
+import {authStore} from "@/lib/stores/auth-store"
 
 
 export default function Login() {
@@ -81,6 +82,7 @@ export default function Login() {
             if (pwd !== password) throw new Error('Senha inválida.')
 
             // success
+            authStore.set('user.email', email.trim())
             router.replace('/(root)/dashboard')
 
         } catch (e: unknown) {

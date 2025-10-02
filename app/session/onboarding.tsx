@@ -7,6 +7,7 @@ import {router} from "expo-router"
 import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
 import {VStack} from "@/components/ui/vstack"
 
+
 export default function Onboarding() {
 
     //
@@ -46,7 +47,7 @@ export default function Onboarding() {
             }}
         >
             <Text
-                style={{ color: 'white', fontSize: scaleFont(16), marginBottom: moderateScale(24) }}
+                style={{ color: 'white', fontSize: scaleFont(16), marginBottom: moderateScale(30) }}
                 className={'text-center'}
             >
                 O 1º aplicativo apaixonado {'\n'} por Mesa Posta
@@ -55,10 +56,13 @@ export default function Onboarding() {
             <ImgW
                 source={require('@/assets/img/logo-800.png')}
                 w={ImgWValue.fromScreenWidth(90)}
-                style={{marginStart: 10}}
+                style={{marginStart: 10, marginBottom: verticalScale(20)}}
             />
             <Text
-                style={{ color: 'white', fontSize: scaleFont(16) }}
+                style={{
+                    color: 'white', fontSize: scaleFont(16),
+                    marginBottom: verticalScale(24)
+            }}
             >
                 Agora a mesa cabe no seu celular
             </Text>
