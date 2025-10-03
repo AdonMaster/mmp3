@@ -82,12 +82,8 @@ export default function Layout() {
                     }}
                 />
 
-                <Tabs.Screen
-                    name='testing'
-                    options={{
-                        href: null
-                    }}
-                />
+                <Tabs.Screen name='testing' options={{ href: null }} />
+                <Tabs.Screen name='profile/profile' options={{ href: null }} />
 
             </Tabs>
 

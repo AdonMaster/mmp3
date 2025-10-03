@@ -50,6 +50,8 @@ const buttonStyle = tva({
         'bg-error-500 border-error-300 data-[hover=true]:bg-error-600 data-[hover=true]:border-error-400 data-[active=true]:bg-error-700 data-[active=true]:border-error-500 data-[focus-visible=true]:web:ring-indicator-info',
       accent:
         'bg-[#ecbb4e] data-[hover=true]:bg-[#e9ad3c] data-[active=true]:bg-[#e9ad3c]',
+      gray1:
+        'bg-[#717275] data-[hover=true]:bg-[#929396] data-[active=true]:bg-[#929396]',
       default:
         'bg-transparent data-[hover=true]:bg-background-50 data-[active=true]:bg-transparent',
     },

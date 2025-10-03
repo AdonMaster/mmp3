@@ -55,6 +55,7 @@ export const ImgW = ({ source, w, style }: { source: ImageSourcePropType, w: Img
                     source={source}
                     style={{ width: dimensions.width, height: dimensions.height }}
                     resizeMode="contain"
+                    alt={source+''}
                 />
             )}
         </View>

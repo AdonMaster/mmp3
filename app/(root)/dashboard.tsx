@@ -3,36 +3,50 @@ import {Image} from "@/components/ui/image"
 import {Box} from "@/components/ui/box"
 import {Grid, GridItem} from '@/components/ui/grid'
 import {Button, ButtonIcon, ButtonText} from "@/components/ui/button"
-import {
-    CalendarIcon,
-    CameraIcon,
-    CogIcon,
-    EditIcon,
-    HandbagIcon,
-    LightbulbIcon,
-    LucideUtensils,
-    PackagePlusIcon,
-    UserIcon,
-    Users2Icon
-} from "lucide-react-native"
+import {CogIcon, EditIcon, LightbulbIcon, UserIcon} from "lucide-react-native"
 import {ScrollView, View} from "react-native"
 import {FontAwesome6} from '@expo/vector-icons'
 import {Card} from "@/components/ui/card"
 import {VStack} from "@/components/ui/vstack"
 import {Heading} from "@/components/ui/heading"
+import {scale, verticalScale} from "@/utils/font-scaling"
+import {authStore} from "@/lib/stores/auth-store"
+import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
+import {router} from "expo-router"
+import {useEffect, useState} from "react"
+import {useIsFocused} from "@react-navigation/native"
 
 
 export default function Dashboard() {
 
+    //
+    const isFocused = useIsFocused()
+    const [userName, setUserName] = useState('')
+    const [userAvatar, setUserAvatar] = useState('')
+
+    useEffect(() => {
+        setUserName(authStore.getString('user.name') ?? '')
+        setUserAvatar(authStore.getString('user.avatar') ?? '')
+    }, [isFocused])
+
+    //
+    function onProfile() {
+        router.push('/profile/profile')
+    }
+
+    //
     return <ScrollView><Box
         className={'p-4 h-full'}
         style={{backgroundColor: '#f4efe8'}}
     >
 
         <Text
-            size='2xl' className='font-bold my-5'
+            size='2xl' className='font-bold' style={{
+            marginTop: scale(10),
+            marginBottom: scale(36)
+        }}
         >
-            Olá, Maria Clara!
+            {userName ? 'Olá, '+userName : 'Seja bem vindo'}!
         </Text>
 
         <Grid
@@ -44,17 +58,24 @@ export default function Dashboard() {
             <GridItem
                 className='flex items-start justify-center'
                 _extra={{
-                    className: 'col-span-3'
+                    className: 'col-span-4'
                 }} style={{}}
             >
-                <Image
-                    source={require('@/assets/img/ph-avatar-woman.jpg')}
-                    className={'rounded-full w-24 h-24'}
-                    size='xl'
-                />
+                {userAvatar
+                    ? <Image
+                        source={{uri: userAvatar}}
+                        className={'rounded-full w-32 h-32'}
+                        size='xl'
+                    />
+                    : <Image
+                        source={require('@/assets/img/ph-avatar-woman.jpg')}
+                        className={'rounded-full w-32 h-32'}
+                        size='xl'
+                    />
+                }
             </GridItem>
             <GridItem _extra={{
-                className: 'col-span-9 '
+                className: 'col-span-8 '
             }} style={{}}>
 
                 <Grid
@@ -66,15 +87,18 @@ export default function Dashboard() {
                     <GridItem _extra={{
                         className: 'col-span-1'
                     }} style={{}}>
-                        <Button size='sm' style={{height: 48}} action='secondary' className='rounded-2xl'>
-                            <ButtonIcon as={UserIcon} className="mr-2"/>
+                        <Button
+                            size='sm' style={{height: verticalScale(60)}} action='gray1' className='rounded-2xl'
+                            onPress={onProfile}
+                        >
+                            <ButtonIcon as={UserIcon} className="mr-2" />
                             <ButtonText>Perfil</ButtonText>
                         </Button>
                     </GridItem>
                     <GridItem _extra={{
                         className: 'col-span-1'
                     }} style={{}}>
-                        <Button size='sm' style={{height: 48}} action='secondary' className='rounded-2xl'>
+                        <Button size='sm' style={{height: verticalScale(60)}} action='gray1' className='rounded-2xl'>
                             <ButtonIcon as={CogIcon} className="mr-2"/>
                             <ButtonText>Configurações</ButtonText>
                         </Button>
@@ -82,7 +106,7 @@ export default function Dashboard() {
                     <GridItem _extra={{
                         className: 'col-span-1'
                     }} style={{}}>
-                        <Button size='sm' style={{height: 48}} action='secondary' className='rounded-2xl'>
+                        <Button size='sm' style={{height: verticalScale(60)}} action='gray1' className='rounded-2xl'>
                             <ButtonIcon as={EditIcon} className="mr-2"/>
                             <ButtonText>Inventário</ButtonText>
                         </Button>
@@ -90,7 +114,7 @@ export default function Dashboard() {
                     <GridItem _extra={{
                         className: 'col-span-1'
                     }} style={{}}>
-                        <Button size='sm' style={{height: 48}} action='secondary' className='rounded-2xl'>
+                        <Button size='sm' style={{height: verticalScale((60))}} action='gray1' className='rounded-2xl'>
                             <ButtonIcon as={LightbulbIcon} className="mr-2"/>
                             <ButtonText>Inspirações</ButtonText>
                         </Button>
@@ -112,9 +136,11 @@ export default function Dashboard() {
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
-                    <Button size="lg" className="rounded-full" variant='solid' style={{width: 24}}>
-                        <ButtonIcon as={CameraIcon}/>
-                    </Button>
+                    <ImgW
+                        w={ImgWValue.fromScreenWidth(20)}
+                        style={{marginStart: 20, marginEnd: 20}}
+                        source={require('@/assets/img/dashboard-top-icons_camera.jpg')}
+                    />
                     <Text size="md" className={'text-center'}>
                         Adicione suas peças
                     </Text>
@@ -122,9 +148,11 @@ export default function Dashboard() {
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
-                    <Button size="lg" className="rounded-full" variant='solid' style={{width: 24}}>
-                        <ButtonIcon as={LucideUtensils}/>
-                    </Button>
+                    <ImgW
+                        w={ImgWValue.fromScreenWidth(20)}
+                        style={{marginStart: 20, marginEnd: 20}}
+                        source={require('@/assets/img/dashboard-top-icons_dinner.jpg')}
+                    />
                     <Text size="md" className={'text-center'}>
                         Acervo
                     </Text>
@@ -132,9 +160,11 @@ export default function Dashboard() {
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
-                    <Button size="lg" className="rounded-full" variant='solid' style={{width: 24}}>
-                        <ButtonIcon as={PackagePlusIcon}/>
-                    </Button>
+                    <ImgW
+                        w={ImgWValue.fromScreenWidth(20)}
+                        style={{marginStart: 20, marginEnd: 20}}
+                        source={require('@/assets/img/dashboard-top-icons_table.jpg')}
+                    />
                     <Text size="md" className={'text-center'}>
                         Composições
                     </Text>
@@ -142,9 +172,11 @@ export default function Dashboard() {
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
-                    <Button size="lg" className="rounded-full" variant='solid' style={{width: 24}}>
-                        <ButtonIcon as={CalendarIcon}/>
-                    </Button>
+                    <ImgW
+                        w={ImgWValue.fromScreenWidth(20)}
+                        style={{marginStart: 20, marginEnd: 20}}
+                        source={require('@/assets/img/dashboard-top-icons_calendar.jpg')}
+                    />
                     <Text size="md" className={'text-center'}>
                         Calendário
                     </Text>
@@ -152,30 +184,34 @@ export default function Dashboard() {
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
+                    <ImgW
+                        w={ImgWValue.fromScreenWidth(20)}
+                        style={{marginStart: 20, marginEnd: 20}}
+                        source={require('@/assets/img/dashboard-top-icons_girls.jpg')}
+                    />
+                    <Text size="md" className={'text-center'}>
+                        Consultoras
+                    </Text>
                     <View
                         style={{width: '100%', height: '100%', position: 'absolute', flex: 1, alignItems: 'flex-end'}}>
                         <FontAwesome6 name='certificate' color='#ef4444' size={24} style={{marginTop: -10}}/>
                     </View>
-                    <Button size="lg" className="rounded-full" variant='solid' style={{width: 24}}>
-                        <ButtonIcon as={Users2Icon}/>
-                    </Button>
-                    <Text size="md" className={'text-center'}>
-                        Consultoras
-                    </Text>
                 </GridItem>
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
+                    <ImgW
+                        w={ImgWValue.fromScreenWidth(20)}
+                        style={{marginStart: 20, marginEnd: 20}}
+                        source={require('@/assets/img/dashboard-top-icons_bag.jpg')}
+                    />
+                    <Text size="md" className={'text-center'}>
+                        Vitrine
+                    </Text>
                     <View
                         style={{width: '100%', height: '100%', position: 'absolute', flex: 1, alignItems: 'flex-end'}}>
                         <FontAwesome6 name='certificate' color='#ef4444' size={24} style={{marginTop: -10}}/>
                     </View>
-                    <Button size="lg" className="rounded-full" variant='solid' style={{width: 24}}>
-                        <ButtonIcon as={HandbagIcon}/>
-                    </Button>
-                    <Text size="md" className={'text-center'}>
-                        Vitrine
-                    </Text>
                 </GridItem>
             </Grid>
 
