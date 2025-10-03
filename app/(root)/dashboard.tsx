@@ -91,7 +91,7 @@ export default function Dashboard() {
                             size='sm' style={{height: verticalScale(60)}} action='gray1' className='rounded-2xl'
                             onPress={onProfile}
                         >
-                            <ButtonIcon as={UserIcon} className="mr-2" />
+                            <ButtonIcon as={UserIcon} className="mr-" />
                             <ButtonText>Perfil</ButtonText>
                         </Button>
                     </GridItem>
@@ -99,7 +99,7 @@ export default function Dashboard() {
                         className: 'col-span-1'
                     }} style={{}}>
                         <Button size='sm' style={{height: verticalScale(60)}} action='gray1' className='rounded-2xl'>
-                            <ButtonIcon as={CogIcon} className="mr-2"/>
+                            <ButtonIcon as={CogIcon} className="mr-"/>
                             <ButtonText>Configurações</ButtonText>
                         </Button>
                     </GridItem>
@@ -107,7 +107,7 @@ export default function Dashboard() {
                         className: 'col-span-1'
                     }} style={{}}>
                         <Button size='sm' style={{height: verticalScale(60)}} action='gray1' className='rounded-2xl'>
-                            <ButtonIcon as={EditIcon} className="mr-2"/>
+                            <ButtonIcon as={EditIcon} className="mr-"/>
                             <ButtonText>Inventário</ButtonText>
                         </Button>
                     </GridItem>
@@ -115,7 +115,7 @@ export default function Dashboard() {
                         className: 'col-span-1'
                     }} style={{}}>
                         <Button size='sm' style={{height: verticalScale((60))}} action='gray1' className='rounded-2xl'>
-                            <ButtonIcon as={LightbulbIcon} className="mr-2"/>
+                            <ButtonIcon as={LightbulbIcon} className="mr-"/>
                             <ButtonText>Inspirações</ButtonText>
                         </Button>
                     </GridItem>

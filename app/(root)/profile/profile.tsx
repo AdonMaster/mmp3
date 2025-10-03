@@ -301,7 +301,13 @@ export default function Profile() {
                         </ButtonText>
                     </Button>
                 </View>
+
+                {/*padding bottom to space*/}
+                <View style={{marginTop: 48}}>
+                </View>
             </VStack>
+
+
 
         </ScrollView>
     </KeyboardAvoidingView>

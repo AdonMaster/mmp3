@@ -7,5 +7,5 @@ export default function Index() {
 
     //
     if (userEmail) return <Redirect href={'/dashboard'}/>
-    return <Redirect href={'/session/login'}/>
+    return <Redirect href={'/session/onboarding'}/>
 }
