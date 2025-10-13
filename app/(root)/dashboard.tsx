@@ -15,18 +15,24 @@ import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
 import {router} from "expo-router"
 import {useEffect, useState} from "react"
 import {useIsFocused} from "@react-navigation/native"
+import sessionRepo from "@/lib/repo/sessionRepo"
+import {Media} from "@/lib/models/Media"
+import mediaRepo from "@/lib/repo/mediaRepo"
+import {useSQLiteContext} from "expo-sqlite"
 
 
 export default function Dashboard() {
 
+    const db = useSQLiteContext()
     //
     const isFocused = useIsFocused()
     const [userName, setUserName] = useState('')
-    const [userAvatar, setUserAvatar] = useState('')
+    const [userAvatar, setUserAvatar] = useState<Media|null>(null)
 
     useEffect(() => {
-        setUserName(authStore.getString('user.name') ?? '')
-        setUserAvatar(authStore.getString('user.avatar') ?? '')
+        const user = sessionRepo.user()
+        setUserName(user?.name ?? '')
+        mediaRepo.find(db, user?.avatar).then(setUserAvatar)
     }, [isFocused])
 
     //
@@ -43,14 +49,14 @@ export default function Dashboard() {
         <Text
             size='2xl' className='font-bold' style={{
             marginTop: scale(10),
-            marginBottom: scale(36)
+            marginBottom: scale(24)
         }}
         >
             {userName ? 'Olá, '+userName : 'Seja bem vindo'}!
         </Text>
 
         <Grid
-            className='mt-5'
+            className='mt-'
             _extra={{
                 className: 'grid-cols-12'
             }}
@@ -61,11 +67,12 @@ export default function Dashboard() {
                     className: 'col-span-4'
                 }} style={{}}
             >
-                {userAvatar
+                {userAvatar?.uri
                     ? <Image
-                        source={{uri: userAvatar}}
+                        source={{uri: userAvatar.uri}}
                         className={'rounded-full w-32 h-32'}
                         size='xl'
+                        alt={'user_avatar'}
                     />
                     : <Image
                         source={require('@/assets/img/ph-avatar-woman.jpg')}
@@ -142,7 +149,7 @@ export default function Dashboard() {
                         source={require('@/assets/img/dashboard-top-icons_camera.jpg')}
                     />
                     <Text size="md" className={'text-center'}>
-                        Adicione suas peças
+                        Adicione{'\n'}suas peças
                     </Text>
                 </GridItem>
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{

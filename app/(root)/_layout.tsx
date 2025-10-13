@@ -30,12 +30,6 @@ export default function Layout() {
             padding: moderateScale(12),
             alignItems: 'center'
         }}>
-            <Image
-                source={require('@/assets/img/border-art-2.jpg')}
-                style={{
-                    height: 256 * .16, width: 296 * .16, position: 'absolute', bottom: 0, right: 0,
-                }}
-            />
 
             <Image
                 source={require('@/assets/img/logo-800.png')}

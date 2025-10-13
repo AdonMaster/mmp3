@@ -11,9 +11,16 @@ import * as SecureStore from 'expo-secure-store'
 import str from "@/utils/str"
 import {HStack} from "@/components/ui/hstack"
 import {router} from "expo-router"
+import sessionRepo from "@/lib/repo/sessionRepo"
+import {useSQLiteContext} from "expo-sqlite"
+import {useLoadErrorContext} from "@/lib/contexts/LoadErrorContext"
 
 
 export default function Register() {
+
+    //
+    const db = useSQLiteContext()
+    const { setLoading } = useLoadErrorContext()
 
     //
     const [email, setEmail] = useState('')
@@ -26,6 +33,7 @@ export default function Register() {
     function validate() {
         if (! str.isEmail(email)) throw new Error('Email inválido.')
         if (password.length <= 0) throw new Error('Senha requerida.')
+        if (password.length < 6) throw new Error('Senha deve ter no mínimo 6 letras.')
         if (passwordConfirmed.length <= 0) throw new Error('Confirmação de password requerida.')
         if (password !== passwordConfirmed) throw new Error('Senha e cofirmação de password devem ser iguais.')
     }
@@ -37,25 +45,17 @@ export default function Register() {
 
         try {
             validate()
-
-            const key = str.sanitize(email.trim() + '__password')
-            const pwd = SecureStore.getItem(key)
-            if (pwd) {
-                setPassword('')
-                setPasswordConfirmed('')
-                throw new Error('Usuário já existente!')
-            }
-
-            // persist
-            SecureStore.setItem(key, password)
+            setLoading(true)
+            await sessionRepo.register(db, email, password)
+            setLoading(false)
 
             //
             router.replace('/session/login?success=user_created')
 
         } catch (e: unknown) {
+            setLoading(false)
             let reason = e+''
             if (e instanceof Error) reason = e.message
-            console.log(reason)
             Alert.alert('Erro', reason, [
                 {
                     text: 'OK',
@@ -68,6 +68,11 @@ export default function Register() {
             })
         }
     }
+
+    function back() {
+        router.replace('/session/onboarding')
+    }
+
 
     //
     return <View
@@ -176,7 +181,7 @@ export default function Register() {
                         variant="solid" size="lg" action="secondary"
                         className={'rounded-full grow'}
                         style={{height: moderateScale(42)}}
-                        onPress={() => {if (router.canGoBack()) router.back()}}
+                        onPress={back}
                     >
                         <ButtonText className={'text-'}>
                             Voltar

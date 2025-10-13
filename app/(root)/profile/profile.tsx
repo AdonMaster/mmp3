@@ -1,13 +1,12 @@
 import {Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, View} from "react-native"
 import {Text} from "@/components/ui/text"
 import {Button, ButtonIcon, ButtonText} from "@/components/ui/button"
-import {ArrowLeftIcon, Icon} from "@/components/ui/icon"
+import {ArrowLeftIcon, CheckIcon} from "@/components/ui/icon"
 import {router} from "expo-router"
 import {Image} from "@/components/ui/image"
-import {CircleCheck, ImageIcon} from "lucide-react-native"
+import {CircleCheck, ImageIcon, LogOutIcon} from "lucide-react-native"
 import {fontScale} from "nativewind/theme"
 import {moderateScale} from "@/utils/font-scaling"
-import {authStore} from "@/lib/stores/auth-store"
 import {VStack} from "@/components/ui/vstack"
 import {Input, InputField} from "@/components/ui/input"
 import {useEffect, useState} from "react"
@@ -17,15 +16,22 @@ import {useIsFocused} from "@react-navigation/native"
 import Str from "@/utils/str"
 import * as ImagePicker from 'expo-image-picker'
 import F from "@/lib/files/F"
+import sessionRepo from "@/lib/repo/sessionRepo"
+import {User} from "@/lib/models/User"
+import mediaRepo from "@/lib/repo/mediaRepo"
+import {useSQLiteContext} from "expo-sqlite"
+import {Media} from "@/lib/models/Media"
+import userRepo from "@/lib/repo/userRepo"
+import {UpdateBuilder} from "@/lib/repo/Builders"
 
 export default function Profile() {
 
+    const db = useSQLiteContext()
     const toast = useToast()
     const isFocused = useIsFocused()
 
-
     const [email, setemail] = useState('')
-    const [avatar, setavatar] = useState('')
+    const [avatar, setavatar] = useState<Media|null>(null)
     const [name, setname] = useState('')
     const [phone, setphone] = useState('')
     const [city, setcity] = useState('')
@@ -34,19 +40,16 @@ export default function Profile() {
 
     //
     useEffect(() => {
-        setavatar(authStore.getString('user.avatar') ?? '')
-        setemail(authStore.getString('user.email') ?? '')
-        setname(authStore.getString('user.name') ?? '')
-
-        setphone(authStore.getString('user.phone') ?? '')
-        setcity(authStore.getString('user.city') ?? '')
-        setuf(authStore.getString('user.uf') ?? '')
-        setinsta(authStore.getString('user.insta') ?? '')
+        const user = sessionRepo.user(true)
+        mediaRepo.find(db, user?.avatar).then(setavatar)
+        setemail(user?.email ?? '')
+        setname(user?.name ?? '')
+        setphone(user?.phone ?? '')
+        setcity(user?.city ?? '')
+        setuf(user?.uf ?? '')
+        setinsta(user?.insta ?? '')
     }, [isFocused])
 
-    useEffect(() => {
-
-    }, [])
 
     //
     function onBack() {
@@ -83,9 +86,10 @@ export default function Profile() {
             if (!result.canceled) {
                 // Use the first asset's URI from the 'assets' array
                 const uri = result.assets[0].uri;
-                const newUri = await F.replaceAvatar(avatar, uri, email)
-                console.log(newUri)
-                setavatar(newUri.uri)
+                const newFilename = `${Date.now()}__${email}`
+                const newFile = await F.copyToDocuments(uri, 'avatars', newFilename)
+                const media = await mediaRepo.create(db, newFile.uri, 'image', null)
+                setavatar(media)
             } else {
                 console.log('cancelled')
             }
@@ -98,14 +102,29 @@ export default function Profile() {
         }
     }
 
-    function submit() {
-        authStore.set('user.avatar', avatar)
-        authStore.set('user.name', name ?? '')
-        authStore.set('user.phone', phone ?? '')
-        authStore.set('user.city', city ?? '')
-        authStore.set('user.uf', uf ?? '')
-        authStore.set('user.insta', insta ?? '')
+    async function submit()
+    {
+        const user = sessionRepo.user()
+        if (! user) return
 
+        //
+        const builder = UpdateBuilder.f<User>()
+            .add('name', name)
+            .add('avatar', avatar?.id ?? 0)
+            .add('city', city)
+            .add('uf', uf)
+            .add('phone', phone)
+            .add('insta', insta)
+        const updatedUser = await userRepo.update(db, user.id, builder)
+        // media avatar
+        if (user.avatar !== avatar?.id) {
+            await mediaRepo.setOwner(db, user.avatar, null)
+            await mediaRepo.setOwner(db, avatar?.id, user.id)
+        }
+        // session
+        await sessionRepo.setUser(updatedUser)
+
+        // ui
         Keyboard.dismiss()
         toast.show({
             placement: 'bottom',
@@ -129,8 +148,14 @@ export default function Profile() {
         });
     }
 
+    async function logoff() {
+        await sessionRepo.logoff()
+        router.replace('/session/onboarding')
+    }
+
     //
-    return <KeyboardAvoidingView>
+    return <View
+    >
         <View
             style={{flex: 1, alignItems: 'flex-start', paddingTop: 10, paddingStart: 20, paddingEnd: 20, marginBottom: 30}}
         >
@@ -144,11 +169,19 @@ export default function Profile() {
                 </ButtonText>
             </Button>
         </View>
+        <KeyboardAvoidingView
+            style={{
+
+            }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={120}
+        >
         <ScrollView
             style={{
                 padding: 20,
             }}
         >
+
             {/*header + picture*/}
             <View style={{backgroundColor: ''}}>
                 <View
@@ -160,7 +193,7 @@ export default function Profile() {
                     <View style={{backgroundColor: ''}}>
                         {avatar
                             ? <Image
-                                source={{uri: avatar}}
+                                source={{uri: avatar.uri}}
                                 className={'rounded-full w-32 h-32'}
                                 size='xl'
                             />
@@ -200,12 +233,12 @@ export default function Profile() {
             {/**/}
             <View style={{marginTop: 24}}>
                 <Text style={{textAlign: 'center'}}>
-                    Edite as caixas de texto e em seguida aperte "Salvar"
+                    Edite as caixas de texto e em seguida aperte &#34;Salvar&#34;
                 </Text>
             </View>
 
             {/*form*/}
-            <VStack style={{marginTop: 24}}>
+            <VStack style={{marginTop: 24, paddingBottom: 120}}>
 
                 {/*field*/}
                 <View>
@@ -264,7 +297,7 @@ export default function Profile() {
                             size="lg"
                         >
                             <InputField
-                                className={'font-'} style={{backgroundColor: '#929396', color: 'white'}}
+                                className={'text-center'} style={{backgroundColor: '#929396', color: 'white'}}
                                 textContentType={'addressState'}
                                 placeholder=""
                                 value={uf} onChangeText={setuf}
@@ -289,27 +322,34 @@ export default function Profile() {
                     </Input>
                 </View>
 
-                <View style={{marginTop: 24, flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                <View style={{marginTop: 24, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Button
+                        variant="solid" size="lg" action="negative"
+                        className={'rounded-full'}
+                        style={{height: moderateScale(42)}}
+                        onPress={logoff}
+                    >
+                        <ButtonIcon as={LogOutIcon} className="mr-" />
+                        <ButtonText>
+                            Sair
+                        </ButtonText>
+                    </Button>
                     <Button
                         variant="solid" size="lg" action="gray1"
                         className={'rounded-full'}
                         style={{height: moderateScale(42)}}
                         onPress={submit}
                     >
+                        <ButtonIcon as={CheckIcon} className="mr-" />
                         <ButtonText>
                             Salvar
                         </ButtonText>
                     </Button>
                 </View>
 
-                {/*padding bottom to space*/}
-                <View style={{marginTop: 48}}>
-                </View>
             </VStack>
-
-
-
         </ScrollView>
-    </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+    </View>
 
 }

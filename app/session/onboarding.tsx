@@ -2,10 +2,11 @@ import {Text} from '@/components/ui/text';
 import {View} from "react-native"
 import {SafeAreaView} from "react-native-safe-area-context"
 import {moderateScale, scale, scaleFont, verticalScale} from "@/utils/font-scaling"
-import {Button, ButtonText} from "@/components/ui/button"
+import {Button, ButtonIcon, ButtonText} from "@/components/ui/button"
 import {router} from "expo-router"
 import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
 import {VStack} from "@/components/ui/vstack"
+import {InfoIcon} from "@/components/ui/icon"
 
 
 export default function Onboarding() {
@@ -91,6 +92,12 @@ export default function Onboarding() {
                     </ButtonText>
                 </Button>
             </VStack>
+            <Button variant="link" onPress={() => {}}>
+                <ButtonText className="text-typography-900 underline">
+                    Política de uso e privacidade
+                </ButtonText>
+            </Button>
+
         </SafeAreaView>
 
     </View>
