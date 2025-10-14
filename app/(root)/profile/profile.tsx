@@ -53,6 +53,7 @@ export default function Profile() {
 
     //
     function onBack() {
+        Keyboard.dismiss()
         router.back()
     }
 
@@ -173,8 +174,8 @@ export default function Profile() {
             style={{
 
             }}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={120}
+            behavior={Platform.OS === 'ios' ? 'height' : 'height'}
+            keyboardVerticalOffset={160}
         >
         <ScrollView
             style={{
