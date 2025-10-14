@@ -1,5 +1,3 @@
-import F from "@/lib/files/F"
-
 export class UpdateBuilder<T> {
     static f<T>() {
         return new UpdateBuilder<T>()

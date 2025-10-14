@@ -17,7 +17,7 @@ export default {
             id: user.uid,
             email: user.email!,
             name: user.displayName ?? '',
-            avatar: '', phone: '', city: '', uf: '', insta: ''
+            avatar: 0, phone: '', city: '', uf: '', insta: ''
         }
         const userDocReference = await getDoc(doc(fbDb, USERS, user.uid))
         if (userDocReference.exists()) {
