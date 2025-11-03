@@ -1,10 +1,11 @@
 import {Image, View} from "react-native"
 import {useSafeAreaInsets} from "react-native-safe-area-context"
 import {HStack} from "@/components/ui/hstack"
-import {moderateScale, verticalScale} from "@/utils/font-scaling"
+import {moderateScale, verticalScale} from "@/lib/utils/font-scaling"
 import {Bell, CircleQuestionMarkIcon, HomeIcon} from 'lucide-react-native'
 import {Tabs} from "expo-router"
 import {StatusBar} from "expo-status-bar";
+import QueryContextProvider from "@/lib/contexts/QueryContextProvider"
 
 
 export default function Layout() {
@@ -50,37 +51,39 @@ export default function Layout() {
         <View
             style={{flexGrow: 1}}
         >
-            <Tabs
-                screenOptions={{
-                    headerShown: false,
-                    tabBarActiveTintColor: 'white',
-                    tabBarItemStyle: {backgroundColor: '#717275'},
-                    tabBarShowLabel: false,
-                    tabBarStyle: {
-                    },
-                    tabBarIconStyle: {
-                        // Style your icon container
-                        width: 40,
-                        height: 40,
-                    },
-                }}
-                safeAreaInsets={{bottom: 0, top: 0}}
-            >
-                <Tabs.Screen
-                    name='dashboard'
-                    options={{
-                        tabBarLabel: () => null,
-                        tabBarIcon: (t) => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            <HomeIcon size={28} color={t.color}/>
-                        </View>
+            <QueryContextProvider>
+                <Tabs
+                    screenOptions={{
+                        headerShown: false,
+                        tabBarActiveTintColor: 'white',
+                        tabBarItemStyle: {backgroundColor: '#717275'},
+                        tabBarShowLabel: false,
+                        tabBarStyle: {},
+                        tabBarIconStyle: {
+                            // Style your icon container
+                            width: 40,
+                            height: 40,
+                        },
                     }}
-                />
+                    safeAreaInsets={{bottom: 0, top: 0}}
+                >
+                    <Tabs.Screen
+                        name='dashboard'
+                        options={{
+                            tabBarLabel: () => null,
+                            tabBarIcon: (t) => <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                <HomeIcon size={28} color={t.color}/>
+                            </View>
+                        }}
+                    />
 
-                <Tabs.Screen name='testing' options={{ href: null }} />
-                <Tabs.Screen name='profile/profile' options={{ href: null }} />
+                    {/**/}
+                    <Tabs.Screen name='profile/profile' options={{href: null}}/>
+                    {/**/}
+                    <Tabs.Screen name='item' options={{href: null}}/>
 
-            </Tabs>
-
+                </Tabs>
+            </QueryContextProvider>
         </View>
 
         <View style={{

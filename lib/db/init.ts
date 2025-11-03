@@ -2,6 +2,8 @@ import {type SQLiteDatabase} from 'expo-sqlite'
 import dbMigrate01 from "@/lib/db/dbMigrate01"
 import dbMigrate02 from "@/lib/db/dbMigrate02"
 import mediaRepo from "@/lib/repo/mediaRepo"
+import dbMigrate03Items from "@/lib/db/dbMigrate03Items"
+import dbMigrate04ItemDetail from "@/lib/db/dbMigrate04ItemDetail"
 
 const DATABASE_VERSION = 2
 
@@ -22,6 +24,10 @@ async function migrate(db: SQLiteDatabase): Promise<void> {
     // zero
     if (currentVersion < 1) await db.execAsync(dbMigrate01)
     if (currentVersion < 2) await db.execAsync(dbMigrate02)
+    if (currentVersion < 3) await db.execAsync(dbMigrate03Items)
+    if (currentVersion < 4) await db.execAsync(dbMigrate04ItemDetail)
+
+    console.log('--> db migrated')
 }
 
 

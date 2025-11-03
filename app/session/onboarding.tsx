@@ -1,7 +1,7 @@
 import {Text} from '@/components/ui/text';
 import {View} from "react-native"
 import {SafeAreaView} from "react-native-safe-area-context"
-import {moderateScale, scale, scaleFont, verticalScale} from "@/utils/font-scaling"
+import {moderateScale, scale, scaleFont, verticalScale} from "@/lib/utils/font-scaling"
 import {Button, ButtonIcon, ButtonText} from "@/components/ui/button"
 import {router} from "expo-router"
 import {ImgW, ImgWValue} from "@/components/widgets/ImgW"

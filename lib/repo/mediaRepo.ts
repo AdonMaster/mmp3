@@ -1,6 +1,7 @@
 import {SQLiteDatabase} from "expo-sqlite"
 import {Media, MediaType} from "@/lib/models/Media"
 import F from "@/lib/files/F"
+import {ImageManipulator, SaveFormat} from 'expo-image-manipulator'
 
 class MediaRepo {
 
@@ -33,6 +34,19 @@ class MediaRepo {
             F.unlink(m.uri)
             await db.runAsync(`delete from media where id = ?`, m.id!)
         }
+    }
+
+    async cloneThumb(db: SQLiteDatabase, full: Media): Promise<Media>
+    {
+        const thumbRef = await ImageManipulator
+            .manipulate(full.uri)
+            .resize({width: 200})
+            .renderAsync()
+        const thumbRes = await thumbRef.saveAsync({compress: 0.7, format: SaveFormat.JPEG})
+        const thumbFile = await F.copyToDocuments(thumbRes.uri, 'thumbs', full.id!.toString())
+
+        //
+        return this.create(db, thumbFile.uri, 'image', full.owner)
     }
 
 }

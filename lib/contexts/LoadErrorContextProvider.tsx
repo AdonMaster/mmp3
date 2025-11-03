@@ -3,7 +3,7 @@ import {LoadErrorContext} from "@/lib/contexts/LoadErrorContext"
 import {View} from "react-native"
 import {Spinner} from "@/components/ui/spinner"
 import {Text} from "@/components/ui/text"
-import {moderateScale, scaleFont, verticalScale} from "@/utils/font-scaling"
+import {moderateScale, scaleFont, verticalScale} from "@/lib/utils/font-scaling"
 import {Button, ButtonText} from "@/components/ui/button"
 import {TriangleAlert} from "lucide-react-native"
 

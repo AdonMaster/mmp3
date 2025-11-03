@@ -1,6 +1,6 @@
 import {Text} from '@/components/ui/text';
 import {Alert, Keyboard, KeyboardAvoidingView, Platform, View} from "react-native"
-import {moderateScale, scaleFont, verticalScale} from "@/utils/font-scaling"
+import {moderateScale, scaleFont, verticalScale} from "@/lib/utils/font-scaling"
 import {Button, ButtonIcon, ButtonText} from "@/components/ui/button"
 import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
 import {VStack} from "@/components/ui/vstack"
@@ -8,7 +8,7 @@ import {Input, InputField, InputIcon, InputSlot} from "@/components/ui/input"
 import {useEffect, useState} from "react"
 import {EyeIcon, EyeOffIcon, Icon, LockIcon} from "@/components/ui/icon"
 import * as SecureStore from 'expo-secure-store'
-import str from "@/utils/str"
+import str from "@/lib/utils/str"
 import {router, useLocalSearchParams} from "expo-router"
 import {HStack} from "@/components/ui/hstack"
 import {useIsFocused} from "@react-navigation/native"

@@ -2,7 +2,7 @@ export type MediaType = 'image'
 export class Media {
 
     constructor(
-        public id: number|undefined,
+        public id: number,
         public type: MediaType,
         public uri: string,
         public server: string,

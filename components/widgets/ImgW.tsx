@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Dimensions, Image, type ImageSourcePropType, StyleProp, View, ViewStyle} from 'react-native';
 
 export class ImgWValue {
@@ -19,13 +19,14 @@ export class ImgWValue {
     }
 }
 
-export const ImgW = ({ source, w, style }: { source: ImageSourcePropType, w: ImgWValue, style?: StyleProp<ViewStyle> }) => {
+export const ImgW = ({ source, w, style }: { source: ImageSourcePropType|string, w: ImgWValue, style?: StyleProp<ViewStyle> }) => {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+    const uri = useMemo(() => typeof source == 'string' ? {uri: source} : source, [source])
 
     useEffect(() => {
         if (source) {
             // Use resolveAssetSource to get dimensions from both remote URIs and local assets
-            const resolvedSource = Image.resolveAssetSource(source);
+            const resolvedSource = Image.resolveAssetSource(uri);
 
             if (resolvedSource && resolvedSource.width && resolvedSource.height) {
                 const originalWidth = resolvedSource.width;
@@ -52,7 +53,7 @@ export const ImgW = ({ source, w, style }: { source: ImageSourcePropType, w: Img
         <View style={[style]}>
             {dimensions.width > 0 && dimensions.height > 0 && (
                 <Image
-                    source={source}
+                    source={uri}
                     style={{ width: dimensions.width, height: dimensions.height }}
                     resizeMode="contain"
                     alt={source+''}

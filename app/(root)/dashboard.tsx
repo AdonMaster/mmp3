@@ -4,12 +4,12 @@ import {Box} from "@/components/ui/box"
 import {Grid, GridItem} from '@/components/ui/grid'
 import {Button, ButtonIcon, ButtonText} from "@/components/ui/button"
 import {CogIcon, EditIcon, LightbulbIcon, UserIcon} from "lucide-react-native"
-import {ScrollView, View} from "react-native"
+import {Pressable, ScrollView, TouchableOpacity, View} from "react-native"
 import {FontAwesome6} from '@expo/vector-icons'
 import {Card} from "@/components/ui/card"
 import {VStack} from "@/components/ui/vstack"
 import {Heading} from "@/components/ui/heading"
-import {scale, verticalScale} from "@/utils/font-scaling"
+import {scale, verticalScale} from "@/lib/utils/font-scaling"
 import {authStore} from "@/lib/stores/auth-store"
 import {ImgW, ImgWValue} from "@/components/widgets/ImgW"
 import {router} from "expo-router"
@@ -143,6 +143,9 @@ export default function Dashboard() {
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
+                    <TouchableOpacity
+                        onPress={()=>router.push('/(root)/item/add')}
+                    >
                     <ImgW
                         w={ImgWValue.fromScreenWidth(20)}
                         style={{marginStart: 20, marginEnd: 20}}
@@ -151,10 +154,14 @@ export default function Dashboard() {
                     <Text size="md" className={'text-center'}>
                         Adicione{'\n'}suas peças
                     </Text>
+                    </TouchableOpacity>
                 </GridItem>
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
+                    <TouchableOpacity
+                        onPress={()=>router.push('/(root)/item/list')}
+                    >
                     <ImgW
                         w={ImgWValue.fromScreenWidth(20)}
                         style={{marginStart: 20, marginEnd: 20}}
@@ -163,6 +170,7 @@ export default function Dashboard() {
                     <Text size="md" className={'text-center'}>
                         Acervo
                     </Text>
+                    </TouchableOpacity>
                 </GridItem>
                 <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
                     className: 'col-span-1'
@@ -176,7 +184,7 @@ export default function Dashboard() {
                         Composições
                     </Text>
                 </GridItem>
-                <GridItem className='bg-white rounded-2xl items-center justify-center py-3 gap-2' _extra={{
+                <GridItem className='bg-white rounded-2xl items-center justify-center py-5 gap-2' _extra={{
                     className: 'col-span-1'
                 }} style={{}}>
                     <ImgW
