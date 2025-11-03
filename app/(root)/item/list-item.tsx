@@ -7,7 +7,7 @@ import {ArrowLeftIcon, SearchIcon} from "@/components/ui/icon"
 import {Input, InputField, InputIcon, InputSlot} from "@/components/ui/input"
 import {router, useLocalSearchParams} from "expo-router"
 import {Box} from "@/components/ui/box"
-import {useCallback, useEffect, useMemo, useState} from "react"
+import {Fragment, useCallback, useEffect, useMemo, useState} from "react"
 import {Item, ItemWithMediaAttr} from "@/lib/models/Item"
 import itemRepo from "@/lib/repo/itemRepo"
 import {useSQLiteContext} from "expo-sqlite"
@@ -87,7 +87,7 @@ export default function ItemListItem() {
         {/*breadcrumbs*/}
         <Box className={'flex-row gap-3'}>
             {cCategories.map(c => (
-                <>
+                <Fragment key={c}>
                     <Text
                         key={c}
                         className={'font-bold text-neutral-400'}
@@ -100,7 +100,7 @@ export default function ItemListItem() {
                     >
                         /
                     </Text>
-                </>
+                </Fragment>
             ))}
         </Box>
 
